@@ -32,7 +32,7 @@ Las características del documento XML a generar son las siguientes:
 * El nombre siempre se almacenará en un elemento llamado "nombre".
 * Los apellidos siempre se almacenarán en un elemento llamado "apellidos".
 * Los teléfonos se almacenarán todos en un elemento llamado "telefonos" (sin acento). Dentro de dicho elemento, habrá sub-elementos, llamados "telefono" (sin acento), cada uno de los cuales contendrá un único teléfono. Los teléfonos deberán aparecer ordenados tal y como se comentó en el párrafo anterior.
-* La etiqueta "telefonos" deberá tener un atributo llamado "total" que contendrá el número total de teléfonos de la lista.
+* La etiqueta "telefonos" deberá tener un atributo llamado "total" que contendrá el número total de teléfonos de la lista. <- *NO VEO FORMA DE HACER ESTO EN UN JSON.*
 * Los correos electrónicos se almacenarán en un elemento llamado "mails". Dentro de dicho elemento, habrá sub-elementos llamados "mail" destinados a almacenar cada uno de los correos electrónicos del usuario.
 * Puedes usar los siguientes datos de prueba en tu aplicación (cada línea debería generar un documento XML):
   
