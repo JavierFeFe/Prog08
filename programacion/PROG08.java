@@ -35,32 +35,51 @@ public class PROG08 {
         Scanner teclado = new Scanner(System.in); //Capturo una línea de texto
         System.out.print("Introduce el texto separado por comas: ");
         String texto = teclado.nextLine();
-        //String texto="X12345678F,\"nombre\",\"apellidos\",+(82)12345678, 612345678,test@TEST.com,(91)23456789 ,prueba@prueba.com"; //Texto de ejemplo      
+        //String texto="X12345678F,\"nombre\",\"apellidos\",+(82)12345678, 612345678,test@TEST.com,(91)23456789 ,prueba@prueba.com, prueba@prueba.com, adsfasdf"; //Texto de ejemplo
         List<String> cadena = new ArrayList<String>(Arrays.asList(texto.split(",")));
         if (cadena.size() >= 3) { //Si la cadena contiene al menos los 3 primeros campos
-            
-            //La detección de los 3 primeros campos se podría mejorar mediante los regex adecuados, pero preferí omitirlo ya que 
+
+            //La detección de los 3 primeros campos se podría mejorar mediante los regex adecuados, pero preferí omitirlo ya que
             //aumentaría considerablemente el código y en las instrucciones del ejercio no especifica que sea necesaria esta comprobación.
-            
+
             String nif = cadena.get(0).trim(); //Establezco el valor del campo nif
             String nombre = cadena.get(1).replaceAll("\"", "").trim(); //Establezco el valor del campo nombre, eliminando espacios al principio y final y las comillas
             String apellidos = cadena.get(2).replaceAll("\"", "").trim(); //Establezco el valor del campo apellidos
             List<String> telefonos = new ArrayList(); //Creo un listado para los teléfonos
             List<String> telefonosInternacionales = new ArrayList(); //Creo un listado para los teléfonos internacionales
             List<String> correos = new ArrayList(); //Creo un listado para los correos
+            List<String> errores = new ArrayList<>();
             datosCliente.addProperty("id", nif); //Almaceno el nif en el json
             datosCliente.addProperty("nombre", nombre); //Almaceno el nombre en el json
             datosCliente.addProperty("apellidos", apellidos); //Almaceno los apellidos en el json
-            for (String campo : cadena) { //Recorro todos los campos de la cadena
+            for (int i = 3; i < cadena.size() ; i++) { //Recorro todos los campos de la cadena
+                String campo = cadena.get(i);
                 if (campo.trim().matches("^\\+?(\\(\\d+\\))?\\d{5}\\d*$")) { //Interpreto mediante un regex un nº de teléfono válido
                     if (campo.contains("+")) { //Si contiene el símbolo + se considera internacional
-                        telefonosInternacionales.add(campo.trim().replaceAll("\\(", "").replaceAll("\\)", ""));
+                        String textoTelefonoInter = campo.trim().replaceAll("\\(", "").replaceAll("\\)", "");
+                        if (!telefonosInternacionales.contains(textoTelefonoInter)) { //Si el teléfono no está en la lista
+                            telefonosInternacionales.add(textoTelefonoInter);
+                        } else{
+                            errores.add("Teléfono duplicado: " + textoTelefonoInter);
+                        }
                     } else { //En otro caso es un teléfono local
-                        telefonos.add(campo.trim().replaceAll("\\(", "").replaceAll("\\)", ""));
+                        String textoTelefono = campo.trim().replaceAll("\\(", "").replaceAll("\\)", "");
+                        if (!telefonos.contains(textoTelefono)) {//Si el telefono no está en la lista
+                            telefonos.add(textoTelefono);
+                        }else{
+                            errores.add("Teléfono duplicado: " + textoTelefono);
+                        }
                     }
-                //Podría hacer simplemente un else si elimino los 3 primeros campos de la cadena, pero mediante este regex me aseguro de su correcta interpretación
+                    //Podría hacer simplemente un else si elimino los 3 primeros campos de la cadena, pero mediante este regex me aseguro de su correcta interpretación
                 } else if (campo.trim().matches("^.+@.+\\..+$")) { //Interpreto mediante un regex el campo de correo electrónico
-                    correos.add(campo.trim().toLowerCase());
+                    String correo = campo.trim().toLowerCase();
+                    if (!correos.contains(correo)) {
+                        correos.add(correo);
+                    }else{
+                        errores.add("Correo duplicado: " + correo);
+                    }
+                } else {
+                    errores.add("Campo no identificado: " + campo.trim());
                 }
             }
             Collections.sort(telefonos); //Ordenos los teléfonos
@@ -80,6 +99,13 @@ public class PROG08 {
                 coleccionCorreos.add(mail2);
             }
             datosCliente.add("correos", coleccionCorreos);
+            JsonArray coleccionErrores = new JsonArray(); //Misma operación pero para los errores
+            for (String error : errores) {
+                JsonObject error2 = new JsonObject();
+                error2.addProperty("error", error);
+                coleccionErrores.add(error2);
+            }
+            datosCliente.add("errores", coleccionErrores);
             //Gson gson = new GsonBuilder().create(); //Builder sin formatear, funciona perfectamente pero pone todo en una línea
             Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create(); //Creo el builder
             System.out.println(gson.toJson(root)); //Muestro el resultado por consola
@@ -89,6 +115,8 @@ public class PROG08 {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+        } else {
+            System.out.println("La cadena de texto no tiene el mínimo de campos necesarios para generar un archivo Json");
         }
     }
 }
