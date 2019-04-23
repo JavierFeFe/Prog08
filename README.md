@@ -41,14 +41,12 @@ X12345678F,"nombre","apellidos",+(82)12345678, 612345678,test@TEST.com,(91)23456
 12345678Z,"nombre","apellidos", prueba@prueba.com,(952)333333,test@test.com ,952333333,test@TEST.com
 ```
 ```Java
-package programacion;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package programacion;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
