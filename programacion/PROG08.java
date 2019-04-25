@@ -32,10 +32,10 @@ public class PROG08 {
         JsonObject root = new JsonObject(); //Creo el elemento raiz
         JsonObject datosCliente = new JsonObject(); //Creo el subelemento datosCliente
         root.add("datos_cliente", datosCliente); //Añado el elemento al elemento raiz
-        //Scanner teclado = new Scanner(System.in); //Capturo una línea de texto
-        //System.out.print("Introduce el texto separado por comas: ");
-        //String texto = teclado.nextLine();
-        String texto="X12345678F,\"nombre\",\"apellidos\",+(82)12345678, 612345678,test@TEST.com,(91)23456789 ,prueba@prueba.com, prueba@prueba.com, adsfasdf"; //Texto de ejemplo
+        Scanner teclado = new Scanner(System.in); //Capturo una línea de texto
+        System.out.print("Introduce el texto separado por comas: ");
+        String texto = teclado.nextLine();
+        //String texto="X12345678F,\"nombre\",\"apellidos\",+(82)12345678, 612345678,test@TEST.com,(91)23456789 ,prueba@prueba.com, prueba@prueba.com, adsfasdf"; //Texto de ejemplo
         List<String> cadena = new ArrayList<String>(Arrays.asList(texto.split(",")));
         if (cadena.size() >= 3) { //Si la cadena contiene al menos los 3 primeros campos
             List<String> errores = new ArrayList<>(); //Creo un listado para los errores
