@@ -105,7 +105,7 @@ public class PROG08 {
             }
             for (int i = 3; i < cadena.size() ; i++) { //Recorro todos los campos de la cadena
                 String campo = cadena.get(i);
-                if (campo.trim().matches("^\\+?(\\(\\d+\\))?\\d{5}\\d*$")) { //Interpreto mediante un regex un nº de teléfono válido
+                if (campo.trim().matches("^\\+?(\\(\\d+\\))?\\d{5,}$")) { //Interpreto mediante un regex un nº de teléfono válido
                     if (campo.contains("+")) { //Si contiene el símbolo + se considera internacional
                         String textoTelefonoInter = campo.trim().replaceAll("\\(", "").replaceAll("\\)", "");
                         if (!telefonosInternacionales.contains(textoTelefonoInter)) { //Si el teléfono no está en la lista
